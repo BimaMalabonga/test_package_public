@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: Create and push tag
-        if: env.EXISTS == 'false'
+        if: github.event_name == 'push' && env.EXISTS == 'false'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
