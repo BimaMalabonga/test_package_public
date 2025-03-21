@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
@@ -32,12 +34,18 @@ jobs:
         id: check_tag
         run: |
           if git rev-parse refs/tags/v${{ env.VERSION }} >/dev/null 2>&1; then
-            echo "Tag exists"
+            echo "Tag v${{ env.VERSION }} exists"
             echo "EXISTS=true" >> $GITHUB_ENV
           else
-            echo "Tag does not exist"
+            echo "Tag v${{ env.VERSION }} does not exist"
             echo "EXISTS=false" >> $GITHUB_ENV
           fi
+
+      - name: Fail PR if tag already exists
+        if: github.event_name == 'pull_request' && env.EXISTS == 'true'
+        run: |
+          echo "Error: Version v${{ env.VERSION }} already exists!"
+          exit 1
 
       - name: Create and push tag
         if: github.event_name == 'push' && env.EXISTS == 'false'
