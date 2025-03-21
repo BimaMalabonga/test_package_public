@@ -6,7 +6,7 @@ authors = ["x <x@det.nl>"]
 readme = "README.md"
 repository = "https://github.com/Dynamic-Energy-Trading/test_package_public"
 packages = [
-    { include = "src" }, # Specifies the location of the package
+    { include = "detquantlib" }, # Specifies the location of the package
 ]
 
 [tool.poetry.dependencies]

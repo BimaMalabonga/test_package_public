@@ -1,6 +1,6 @@
 import importlib.metadata
 
-from main.main import main
+from detquantlib.main import main
 
 if __name__ == "__main__":
     # Print package name and version, as defined in pyproject.toml
