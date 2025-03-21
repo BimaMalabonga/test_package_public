@@ -20,10 +20,12 @@ jobs:
 
     steps:
       #----------------------------------------------
-      # Check-out repo and set-up python
+      # Check-out repository and set-up python
       #----------------------------------------------
-      - uses: actions/checkout@v4
-        name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
