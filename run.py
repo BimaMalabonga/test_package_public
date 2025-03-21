@@ -1,6 +1,6 @@
 import importlib.metadata
 
-from src.main import main
+from test_package_public.main import main
 
 if __name__ == "__main__":
     # Print package name and version, as defined in pyproject.toml
