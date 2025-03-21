@@ -23,7 +23,7 @@ jobs:
       # Check-out repo and set-up python
       #----------------------------------------------
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
+        name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
