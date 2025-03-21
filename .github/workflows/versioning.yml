@@ -1,0 +1,46 @@
+name: Versioning and Tagging
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11"]
+
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Read version from _version_.py
+        id: get_version
+        run: echo "VERSION=$(grep -oP '(?<=__version__ = \")\d+\.\d+\.\d+' _version_.py)" >> $GITHUB_ENV
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse refs/tags/v${{ env.VERSION }} >/dev/null 2>&1; then
+            echo "Tag exists"
+            echo "EXISTS=true" >> $GITHUB_ENV
+          else
+            echo "Tag does not exist"
+            echo "EXISTS=false" >> $GITHUB_ENV
+          fi
+
+      - name: Create and push tag
+        if: env.EXISTS == 'false'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a v${{ env.VERSION }} -m "Release v${{ env.VERSION }}"
+          git push origin v${{ env.VERSION }}
